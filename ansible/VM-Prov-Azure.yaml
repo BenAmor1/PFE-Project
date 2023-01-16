@@ -26,6 +26,15 @@
   - name: Public IP of VM
     debug:
       msg: "The public IP is {{ output_ip_address.state.ip_address }}."
+  - name: assign public IP to a variable
+    set_fact:
+      VM_public_ip: "{{ output_ip_address.state.ip_address }}"
+  - name: Write the public IP to a file
+    file:
+      path: public_ip.txt
+      state: touch
+      mode: 0600
+    content: "{{ VM_public_ip }}"
   - name: Create Network Security Group that allows SSH
     azure_rm_securitygroup:
       resource_group: myResourceGroup
